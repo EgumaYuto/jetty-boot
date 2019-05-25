@@ -237,19 +237,31 @@ public class JettyBoot {
         }
         prepareServer();
         final URI uri = startServer();
-        info("Boot successful" + (development ? " as development" : "") + ": url -> " + uri);
+        final String host = getServerHost();
+        if (host != null) {
+            info("Boot successful" + (development ? " as development" : "") + ": url -> " + uri);
+        } else {
+            final String uriHost = uri.getHost();
+            final String loggingUri = uri.toString().replace(uriHost, "localhost");
+            info("Boot successful" + (development ? " as development" : "") + ": url -> " + loggingUri);
+        }
         browseOnDesktopIfNeeds(uri);
         return this;
     }
 
     protected void prepareServer() {
         final WebAppContext context = prepareWebAppContext();
-        server = new Server(new InetSocketAddress(getServerHost(), port));
+        final String host = getServerHost();
+        if (host != null) {
+            server = new Server(new InetSocketAddress(host, port));
+        } else {
+            server = new Server(port);
+        }
         server.setHandler(context);
     }
 
     protected String getServerHost() {
-        return "localhost";
+        return null;
     }
 
     protected URI startServer() {
