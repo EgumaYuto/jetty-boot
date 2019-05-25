@@ -50,6 +50,7 @@ import org.eclipse.jetty.webapp.WebXmlConfiguration;
 /**
  * @author p1us2er0
  * @author jflute
+ * @author cabos
  */
 public class JettyBoot {
 
